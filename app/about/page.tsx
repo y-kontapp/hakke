@@ -1,9 +1,25 @@
 import Link from "next/link";
 
-export const metadata = {
-  title: "About · EKIKYO",
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
   description:
-    "易経・八卦・六十四卦の基本と、このアプリでの読み方をまとめたページです。",
+    "易経・八卦・六十四卦の基本と、本卦・之卦の読み方、三枚銭法の仕組みを解説するページです。",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About · EKIKYO",
+    description:
+      "易経・八卦・六十四卦の基本と、本卦・之卦の読み方、三枚銭法の仕組みを解説するページです。",
+    url: "https://hakke.vercel.app/about",
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About · EKIKYO",
+    description:
+      "易経・八卦・六十四卦の基本と、本卦・之卦の読み方、三枚銭法の仕組みを解説するページです。",
+  },
 };
 
 const SECTIONS = [
