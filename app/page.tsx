@@ -400,18 +400,18 @@ export default function Page() {
           <ol className="space-y-5">
             {[
               {
-                title: "今、心に抱えている問いを思い浮かべる",
-                desc: "悩んでいること、決めかねていること、ひとつだけ選んで言葉にしてみてください。",
+                title: "胸の奥にある問いを、ひとつ思い浮かべる",
+                desc: "決めかねていること、揺れていること。たったひとつだけ、言葉のかたちにしてみてください。",
                 color: "bg-[#FCC419]",
               },
               {
-                title: "その問いを胸に、サイコロを六回振る",
-                desc: "一爻（こう）ずつじっくり振っても、六爻一括で振っても構いません。",
+                title: "その問いを胸に、サイコロを六度委ねる",
+                desc: "一爻（こう）ずつ間を置いても、六爻まとめて投じても構いません。",
                 color: "bg-[#E63946]",
               },
               {
-                title: "立ち現れた卦（か）から、問いへの示唆を読み取る",
-                desc: "変爻（へんこう）があれば之卦（しか）が現れ、現在から未来への流れを示します。",
+                title: "立ち現れた卦（か）から、問いへの示唆を汲み取る",
+                desc: "変爻（へんこう）があれば之卦（しか）が浮かび、いまから先へと続く流れが指し示されます。",
                 color: "bg-[#1D6FE5]",
               },
             ].map((step, i) => (
@@ -441,7 +441,7 @@ export default function Page() {
             </span>
           </div>
           <p className="text-sm leading-relaxed text-[#F4E4C1]">
-            卦は答えではなく、今の状況の構造を映す鏡です。直接の問いと違う領域（家庭・旅・争いなど）が出ても、その本義を自分の問いに重ね直して読みます。
+            卦は答えを差し出すのではなく、いまの状況の構造を、静かに映す鏡。問いと一見そぐわぬ象——家庭、旅、争い——が立ち現れても、その本義をたぐり寄せ、自分の問いに重ね合わせて読み解いていきます。
           </p>
         </section>
 
@@ -454,12 +454,12 @@ export default function Page() {
           <textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="例：今の仕事を続けるべきか。彼との関係をどう進めるべきか。"
+            placeholder="例：いまの道を進むべきか。あの人との距離を、どう測るべきか。"
             rows={3}
             className="w-full resize-none border-[2.5px] border-[#1A1A1A] bg-[#F4E4C1] px-4 py-3 text-sm leading-relaxed text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:ring-0"
           />
           <p className="mt-2 text-xs text-[#1A1A1A]/60">
-            書かなくても占えますが、言葉にすると問いが定まります。
+            綴らずとも占えますが、言葉にすることで、問いは輪郭を取り戻します。
           </p>
         </section>
 
@@ -591,6 +591,32 @@ export default function Page() {
 
         {primary && (
           <section className="space-y-6">
+            <div className="fade-up frame-thick bg-[#FBF1DC] p-6 sm:p-8">
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="flex items-start gap-4">
+                  <span className="h-3 w-3 flex-shrink-0 translate-y-1.5 bg-[#FCC419]" />
+                  <div>
+                    <div className="font-display text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60">
+                      Primary · 本卦
+                    </div>
+                    <p className="mt-1.5 text-sm leading-relaxed text-[#1A1A1A]">
+                      いま、自分が置かれている状況——その構造そのもの。
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="h-3 w-3 flex-shrink-0 translate-y-1.5 bg-[#E63946]" />
+                  <div>
+                    <div className="font-display text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60">
+                      To Come · 之卦
+                    </div>
+                    <p className="mt-1.5 text-sm leading-relaxed text-[#1A1A1A]">
+                      そこから自ずと流れ着く先——変化のあとに立ち現れる姿。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             {question.trim() && (
               <div className="fade-up frame-thick bg-[#1A1A1A] p-6 sm:p-8">
                 <div className="font-display mb-3 inline-block bg-[#FCC419] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
@@ -610,24 +636,12 @@ export default function Page() {
             />
             {secondary && (
               <>
-                <div className="fade-up">
-                  <div className="flex items-center justify-center gap-4 py-2">
-                    <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
-                    <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#F4E4C1]">
-                      今後 · 之卦（しか）
-                    </span>
-                    <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
-                  </div>
-                  <div className="mx-auto mt-3 max-w-xl space-y-1 text-center text-xs leading-relaxed text-[#1A1A1A]/70">
-                    <p>
-                      <span className="font-medium text-[#1A1A1A]">本卦</span>
-                      は、いま自分が置かれている状況の構造。
-                    </p>
-                    <p>
-                      <span className="font-medium text-[#1A1A1A]">之卦</span>
-                      は、そこから自然に向かっていく先、変化後の姿です。
-                    </p>
-                  </div>
+                <div className="fade-up flex items-center justify-center gap-4 py-2">
+                  <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
+                  <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#F4E4C1]">
+                    今後 · 之卦（しか）
+                  </span>
+                  <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
                 </div>
                 <HexagramCard
                   hex={secondary}
@@ -639,7 +653,7 @@ export default function Page() {
             )}
             {!secondary && (
               <p className="fade-up frame-thick bg-[#FBF1DC] p-5 text-center text-sm tracking-wide text-[#1A1A1A]">
-                変爻なし — 本卦の示唆をそのまま受け取ってください
+                変爻なし——いまの状況は、まだ動かず。本卦の示唆を、そのまま胸に置いてください。
               </p>
             )}
           </section>
@@ -655,13 +669,13 @@ export default function Page() {
             </div>
           </div>
           <p className="mt-5 text-center text-xs leading-relaxed text-[#1A1A1A]/70">
-            三枚銭法（さんまいせんぽう）に倣い、三個のサイコロで各爻を決定します。
+            三枚銭法（さんまいせんぽう）に倣い、三つのサイコロで各爻を立てる手法をとります。
             <br />
-            1〜3 を陽（3点）、4〜6 を陰（2点）として合計で爻を判じます：
+            1〜3 を陽（3点）、4〜6 を陰（2点）と置き、合計で爻の性質を見定めます。
             <br />
             6＝老陰（ろういん）、7＝少陽（しょうよう）、8＝少陰（しょういん）、9＝老陽（ろうよう）。
             <br />
-            老陽・老陰が変爻となり、之卦を生みます。
+            極まった老陽・老陰が変爻となり、之卦を呼び寄せます。
           </p>
         </footer>
       </div>
