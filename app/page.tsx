@@ -329,10 +329,13 @@ export default function Page() {
             I Ching Oracle · 2026
             <span className="h-px w-8 bg-zinc-700" />
           </div>
-          <h1 className="gradient-text text-6xl font-bold tracking-tight sm:text-7xl">
-            六十四卦
+          <h1 className="gradient-text font-display text-7xl font-bold tracking-tight sm:text-8xl">
+            EKIKYO
           </h1>
-          <p className="mt-6 text-base font-light text-zinc-400">
+          <p className="mt-5 text-xl font-light tracking-[0.4em] text-zinc-300">
+            六十四卦
+          </p>
+          <p className="mt-4 text-sm font-light text-zinc-500">
             サイコロを六回振り、本卦と之卦を立てる
           </p>
         </header>
@@ -535,7 +538,7 @@ export default function Page() {
             1〜3 を陽（3点）、4〜6 を陰（2点）として合計 6〜9 で爻の性質を判じます。
           </p>
           <p className="font-display mt-4 text-[10px] tracking-[0.3em] text-zinc-700">
-            All {HEXAGRAMS.length} hexagrams · I Ching · 2026
+            EKIKYO · All {HEXAGRAMS.length} hexagrams · 2026
           </p>
         </footer>
       </div>

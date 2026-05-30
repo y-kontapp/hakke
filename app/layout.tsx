@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "六十四卦 · I Ching Oracle",
+  title: "EKIKYO · 六十四卦",
   description:
     "サイコロを六回振り、易経の六十四卦と之卦を立てるシンプルな占いアプリ。",
 };
