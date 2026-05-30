@@ -232,7 +232,7 @@ function HexagramCard({
         <div className="mt-8 grid gap-7 border-t-[2.5px] border-[#1A1A1A] pt-6">
           <div>
             <div className="font-display mb-2 inline-block bg-[#1A1A1A] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#F4E4C1]">
-              Judgement · 卦辞
+              Judgement · 卦辞（かじ）
             </div>
             <p className="mt-2 text-sm leading-relaxed text-[#1A1A1A]">
               {hex.judgement}
@@ -374,12 +374,12 @@ export default function Page() {
               },
               {
                 title: "その問いを胸に、サイコロを六回振る",
-                desc: "一爻ずつじっくり振っても、六爻一括で振っても構いません。",
+                desc: "一爻（こう）ずつじっくり振っても、六爻一括で振っても構いません。",
                 color: "bg-[#E63946]",
               },
               {
-                title: "立ち現れた卦から、問いへの示唆を読み取る",
-                desc: "変爻があれば之卦が現れ、現在から未来への流れを示します。",
+                title: "立ち現れた卦（か）から、問いへの示唆を読み取る",
+                desc: "変爻（へんこう）があれば之卦（しか）が現れ、現在から未来への流れを示します。",
                 color: "bg-[#1D6FE5]",
               },
             ].map((step, i) => (
@@ -571,7 +571,7 @@ export default function Page() {
             )}
             <HexagramCard
               hex={primary}
-              label="本卦 · Primary"
+              label="本卦（ほんけ） · Primary"
               lines={lines}
               highlightChanges
               accentColor="bg-[#FCC419]"
@@ -611,9 +611,13 @@ export default function Page() {
             </div>
           </div>
           <p className="mt-5 text-center text-xs leading-relaxed text-[#1A1A1A]/70">
-            三枚銭法に倣い、三個のサイコロで各爻を決定します。
+            三枚銭法（さんまいせんぽう）に倣い、三個のサイコロで各爻を決定します。
             <br />
-            1〜3 を陽（3点）、4〜6 を陰（2点）として合計 6〜9 で爻の性質を判じます。
+            1〜3 を陽（3点）、4〜6 を陰（2点）として合計で爻を判じます：
+            <br />
+            6＝老陰（ろういん）、7＝少陽（しょうよう）、8＝少陰（しょういん）、9＝老陽（ろうよう）。
+            <br />
+            老陽・老陰が変爻となり、之卦を生みます。
           </p>
         </footer>
       </div>
