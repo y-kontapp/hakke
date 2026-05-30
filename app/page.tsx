@@ -402,6 +402,17 @@ export default function Page() {
           </ol>
         </section>
 
+        <section className="fade-up frame-thick mb-10 bg-[#1A1A1A] p-8 sm:p-10">
+          <div className="mb-4 inline-block bg-[#FCC419] px-2 py-0.5">
+            <span className="font-display text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
+              Reading · 読み解きのコツ
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed text-[#F4E4C1]">
+            卦は答えではなく、今の状況の構造を映す鏡です。直接の問いと違う領域（家庭・旅・争いなど）が出ても、その本義を自分の問いに重ね直して読みます。たとえば「家人」は内を整えよの象徴ですので、アプリ作りの問いなら「設計や体制を固めてから外に出よ」と読み替えられます。
+          </p>
+        </section>
+
         <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-8 sm:p-10">
           <div className="mb-4 flex items-center gap-3">
             <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#FCC419] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
