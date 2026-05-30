@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   HEXAGRAMS,
@@ -246,6 +247,35 @@ function HexagramCard({
               {hex.interpretation}
             </p>
           </div>
+          <div>
+            <div className="font-display mb-3 inline-block bg-[#1A1A1A] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#F4E4C1]">
+              Guidance · 領域別の指針
+            </div>
+            <div className="mt-3 space-y-3">
+              {[
+                { label: "仕事", en: "Work", color: "bg-[#FCC419]", text: hex.guidance.work },
+                { label: "思想", en: "Thought", color: "bg-[#E63946]", text: hex.guidance.thought },
+                { label: "勉強", en: "Study", color: "bg-[#1D6FE5]", text: hex.guidance.study },
+                { label: "恋愛", en: "Love", color: "bg-[#FCC419]", text: hex.guidance.love },
+                { label: "健康", en: "Health", color: "bg-[#1D6FE5]", text: hex.guidance.health },
+              ].map((g) => (
+                <div
+                  key={g.en}
+                  className="border-[2.5px] border-[#1A1A1A] bg-[#F4E4C1] p-3"
+                >
+                  <div className="mb-1.5 flex items-center gap-2">
+                    <span className={`h-2 w-2 ${g.color}`} />
+                    <span className="font-display text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
+                      {g.label} · {g.en}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-[#1A1A1A]">
+                    {g.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -336,10 +366,12 @@ export default function Page() {
               <span className="h-3 w-3 rounded-full bg-[#E63946]" />
               <span>I Ching Oracle</span>
             </div>
-            <div className="font-display text-right text-[11px] uppercase tracking-[0.3em] text-[#1A1A1A]">
-              <div>'26</div>
-              <div className="text-[#1A1A1A]/70">64 Hexagrams</div>
-            </div>
+            <Link
+              href="/about"
+              className="font-display border-[2.5px] border-[#1A1A1A] bg-[#F4E4C1] px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-[#1A1A1A] transition hover:bg-[#FCC419]"
+            >
+              About →
+            </Link>
           </div>
 
           <div className="relative mt-12">
@@ -409,7 +441,7 @@ export default function Page() {
             </span>
           </div>
           <p className="text-sm leading-relaxed text-[#F4E4C1]">
-            卦は答えではなく、今の状況の構造を映す鏡です。直接の問いと違う領域（家庭・旅・争いなど）が出ても、その本義を自分の問いに重ね直して読みます。たとえば「家人」は内を整えよの象徴ですので、アプリ作りの問いなら「設計や体制を固めてから外に出よ」と読み替えられます。
+            卦は答えではなく、今の状況の構造を映す鏡です。直接の問いと違う領域（家庭・旅・争いなど）が出ても、その本義を自分の問いに重ね直して読みます。
           </p>
         </section>
 
