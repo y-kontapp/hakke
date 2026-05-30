@@ -374,13 +374,15 @@ export default function Page() {
             </Link>
           </div>
 
-          <div className="relative mt-12">
+          <div className="relative mt-10 sm:mt-12">
             <h1 className="font-display text-[20vw] leading-[0.85] text-[#1A1A1A] sm:text-[140px]">
               EKIKYO
             </h1>
-            <p className="font-display absolute -bottom-2 right-0 bg-[#1A1A1A] px-3 py-1 text-xs tracking-widest text-[#F4E4C1] sm:right-2">
-              YÌ JĪNG · 易经
-            </p>
+            <div className="mt-3 flex justify-end sm:mt-0">
+              <p className="font-display inline-block bg-[#1A1A1A] px-3 py-1 text-xs tracking-widest text-[#F4E4C1] sm:absolute sm:-bottom-2 sm:right-2">
+                YÌ JĪNG · 易经
+              </p>
+            </div>
           </div>
 
           <div className="mt-10 flex items-center justify-center">
