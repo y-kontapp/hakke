@@ -660,10 +660,7 @@ export default function Page() {
         )}
 
         <footer className="mt-20 border-t-[2.5px] border-[#1A1A1A] pt-8">
-          <div className="flex items-center justify-between">
-            <div className="font-display text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]">
-              EKIKYO
-            </div>
+          <div className="flex justify-end">
             <div className="font-display text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]">
               '26 · {HEXAGRAMS.length} Hexagrams
             </div>
