@@ -100,7 +100,7 @@ function Die({
 
   if (value === 0 && !spinning) {
     return (
-      <div className="h-12 w-12 border-2 border-dashed border-[#1A1A1A]/30" />
+      <div className="h-10 w-10 border-2 border-dashed border-[#1A1A1A]/30 sm:h-12 sm:w-12" />
     );
   }
 
@@ -108,7 +108,7 @@ function Die({
 
   return (
     <div
-      className={`relative h-12 w-12 border-[2.5px] border-[#1A1A1A] ${bg} ${
+      className={`relative h-10 w-10 border-[2.5px] border-[#1A1A1A] sm:h-12 sm:w-12 ${bg} ${
         spinning ? "shake" : ""
       }`}
     >
@@ -197,9 +197,9 @@ function HexagramCard({
         </span>
       </div>
 
-      <div className="relative p-8 sm:p-10">
+      <div className="relative p-5 sm:p-10">
         <div className="flex items-baseline gap-3">
-          <span className="font-display text-5xl text-[#1A1A1A]">
+          <span className="font-display text-4xl text-[#1A1A1A] sm:text-5xl">
             № {String(hex.no).padStart(2, "0")}
           </span>
           <span className="font-display text-sm text-[#1A1A1A]/60">
@@ -207,9 +207,9 @@ function HexagramCard({
           </span>
         </div>
 
-        <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+        <div className="mt-12 flex flex-col gap-6 sm:mt-6 sm:flex-row sm:items-start sm:gap-8">
           <div className="flex flex-col items-center gap-3">
-            <div className="text-8xl leading-none text-[#1A1A1A]">
+            <div className="text-7xl leading-none text-[#1A1A1A] sm:text-8xl">
               {hex.symbol}
             </div>
             <div className="frame inline-block bg-[#F4E4C1] px-2 py-0.5 text-[10px] tracking-widest text-[#1A1A1A]">
@@ -221,7 +221,7 @@ function HexagramCard({
             <div className="font-display text-xs uppercase tracking-[0.3em] text-[#1A1A1A]/60">
               {hex.reading.toUpperCase()}
             </div>
-            <h2 className="font-display mt-1 text-4xl tracking-wide text-[#1A1A1A]">
+            <h2 className="font-display mt-1 text-3xl tracking-wide text-[#1A1A1A] sm:text-4xl">
               {hex.name}
             </h2>
             <div className="mt-5 inline-block bg-[#F4E4C1] frame p-3">
@@ -359,8 +359,8 @@ export default function Page() {
     <main className="relative min-h-screen overflow-hidden bg-[#F4E4C1]">
       <div className="absolute inset-x-0 top-0 h-[55%] bg-[#F5B878]" />
 
-      <div className="relative mx-auto max-w-3xl px-6 py-12 sm:py-16">
-        <header className="relative mb-12">
+      <div className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16">
+        <header className="relative mb-10 sm:mb-12">
           <div className="flex items-start justify-between">
             <div className="font-display flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-[#1A1A1A]">
               <span className="h-3 w-3 rounded-full bg-[#E63946]" />
@@ -396,7 +396,7 @@ export default function Page() {
 
         </header>
 
-        <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-8 sm:p-10">
+        <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-5 sm:p-10">
           <ol className="space-y-5">
             {[
               {
@@ -434,7 +434,7 @@ export default function Page() {
           </ol>
         </section>
 
-        <section className="fade-up frame-thick mb-10 bg-[#1A1A1A] p-8 sm:p-10">
+        <section className="fade-up frame-thick mb-10 bg-[#1A1A1A] p-5 sm:p-10">
           <div className="mb-4 inline-block bg-[#FCC419] px-2 py-0.5">
             <span className="font-display text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
               Reading · 読み解きのコツ
@@ -445,7 +445,7 @@ export default function Page() {
           </p>
         </section>
 
-        <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-8 sm:p-10">
+        <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-5 sm:p-10">
           <div className="mb-4 flex items-center gap-3">
             <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#FCC419] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
               Question · 今考えていること
@@ -463,7 +463,7 @@ export default function Page() {
           </p>
         </section>
 
-        <section className="fade-up frame-thick mb-12 bg-[#FBF1DC] p-8 sm:p-10">
+        <section className="fade-up frame-thick mb-12 bg-[#FBF1DC] p-5 sm:p-10">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="h-4 w-4 rounded-full bg-[#1D6FE5]" />
@@ -509,7 +509,7 @@ export default function Page() {
               return (
                 <li
                   key={i}
-                  className={`flex items-center gap-4 border-[2.5px] px-4 py-3 transition-colors ${
+                  className={`flex items-center gap-2 border-[2.5px] px-2.5 py-2.5 transition-colors sm:gap-4 sm:px-4 sm:py-3 ${
                     spinning
                       ? "border-[#1A1A1A] bg-[#FCC419]/30"
                       : t
@@ -517,9 +517,9 @@ export default function Page() {
                         : "border-dashed border-[#1A1A1A]/30 bg-transparent"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-shrink-0 items-center gap-1.5 sm:gap-3">
                     <span
-                      className={`font-display flex h-8 w-8 items-center justify-center border-2 text-xs ${
+                      className={`font-display flex h-7 w-7 items-center justify-center border-2 text-[10px] sm:h-8 sm:w-8 sm:text-xs ${
                         t || spinning
                           ? "border-[#1A1A1A] bg-[#1A1A1A] text-[#F4E4C1]"
                           : "border-[#1A1A1A]/30 bg-transparent text-[#1A1A1A]/40"
@@ -528,7 +528,7 @@ export default function Page() {
                       0{i + 1}
                     </span>
                     <span
-                      className={`text-sm ${
+                      className={`hidden text-sm sm:inline ${
                         t || spinning
                           ? "text-[#1A1A1A]"
                           : "text-[#1A1A1A]/40"
@@ -537,7 +537,7 @@ export default function Page() {
                       {label}爻
                     </span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-shrink-0 gap-1.5 sm:gap-2">
                     <Die
                       value={t?.dice[0] ?? 0}
                       spinning={spinning}
@@ -591,7 +591,7 @@ export default function Page() {
 
         {primary && (
           <section className="space-y-6">
-            <div className="fade-up frame-thick bg-[#FBF1DC] p-6 sm:p-8">
+            <div className="fade-up frame-thick bg-[#FBF1DC] p-5 sm:p-8">
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="flex items-start gap-4">
                   <span className="h-3 w-3 flex-shrink-0 translate-y-1.5 bg-[#FCC419]" />
@@ -618,7 +618,7 @@ export default function Page() {
               </div>
             </div>
             {question.trim() && (
-              <div className="fade-up frame-thick bg-[#1A1A1A] p-6 sm:p-8">
+              <div className="fade-up frame-thick bg-[#1A1A1A] p-5 sm:p-8">
                 <div className="font-display mb-3 inline-block bg-[#FCC419] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
                   Your Question · 問い
                 </div>

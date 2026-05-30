@@ -93,7 +93,7 @@ export default function AboutPage() {
     <main className="relative min-h-screen overflow-hidden bg-[#F4E4C1]">
       <div className="absolute inset-x-0 top-0 h-[35%] bg-[#F5B878]" />
 
-      <div className="relative mx-auto max-w-3xl px-6 py-12 sm:py-16">
+      <div className="relative mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16">
         <header className="relative mb-12">
           <div className="flex items-start justify-between">
             <div className="font-display flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-[#1A1A1A]">
@@ -122,7 +122,7 @@ export default function AboutPage() {
           {SECTIONS.map((section) => (
             <section
               key={section.no}
-              className="fade-up frame-thick bg-[#FBF1DC] p-8 sm:p-10"
+              className="fade-up frame-thick bg-[#FBF1DC] p-5 sm:p-10"
             >
               <div className="mb-5 flex flex-wrap items-center gap-3">
                 <span
