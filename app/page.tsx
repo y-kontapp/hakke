@@ -614,7 +614,7 @@ export default function Page() {
                   <div className="flex items-center justify-center gap-4 py-2">
                     <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
                     <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#F4E4C1]">
-                      Transforms · 之卦（しか）
+                      今後 · 之卦（しか）
                     </span>
                     <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
                   </div>
@@ -631,7 +631,7 @@ export default function Page() {
                 </div>
                 <HexagramCard
                   hex={secondary}
-                  label="之卦 · Transformed"
+                  label="之卦 · 今後"
                   lines={transformed!}
                   accentColor="bg-[#1D6FE5]"
                 />
