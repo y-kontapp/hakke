@@ -401,7 +401,7 @@ export default function Page() {
             {[
               {
                 title: "胸の奥にある問いを、ひとつ思い浮かべる",
-                desc: "まず三度、深く息を整えてください。決めかねていること、揺れていること。たったひとつだけ、言葉のかたちにしてみてください。",
+                desc: "まず三度、深く息を整えてください。\n決めかねていること、揺れていること。たったひとつだけ、言葉のかたちにしてみてください。",
                 color: "bg-[#FCC419]",
               },
               {
@@ -425,7 +425,7 @@ export default function Page() {
                   <p className="text-base font-medium text-[#1A1A1A]">
                     {step.title}
                   </p>
-                  <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">
+                  <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-[#1A1A1A]/70">
                     {step.desc}
                   </p>
                 </div>
