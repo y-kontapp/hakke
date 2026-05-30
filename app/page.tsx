@@ -58,7 +58,13 @@ const PIP_GRID_CELL: Record<string, string> = {
   br: "col-start-3 row-start-3",
 };
 
-function Pips({ count, dark }: { count: number; dark?: boolean }) {
+const DIE_BG_CYCLE = [
+  "bg-[#FCC419]",
+  "bg-[#E63946]",
+  "bg-[#1D6FE5]",
+];
+
+function Pips({ count }: { count: number }) {
   const positions = PIP_POSITIONS[count] ?? [];
   return (
     <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-0 p-2">
@@ -67,11 +73,7 @@ function Pips({ count, dark }: { count: number; dark?: boolean }) {
           key={pos}
           className={`${PIP_GRID_CELL[pos]} flex items-center justify-center`}
         >
-          <div
-            className={`h-1.5 w-1.5 rounded-full ${
-              dark ? "bg-zinc-100" : "bg-zinc-900"
-            }`}
-          />
+          <div className="h-2 w-2 rounded-full bg-[#1A1A1A]" />
         </div>
       ))}
     </div>
@@ -83,11 +85,13 @@ function Die({
   spinning,
   tick,
   delay,
+  colorIndex,
 }: {
   value: number;
   spinning?: boolean;
   tick: number;
   delay: number;
+  colorIndex: number;
 }) {
   const displayValue = spinning
     ? (((tick * 7 + delay * 11) % 6) + 1)
@@ -95,28 +99,19 @@ function Die({
 
   if (value === 0 && !spinning) {
     return (
-      <div className="h-12 w-12 rounded-xl border border-dashed border-white/10" />
+      <div className="h-12 w-12 border-2 border-dashed border-[#1A1A1A]/30" />
     );
   }
 
+  const bg = spinning ? DIE_BG_CYCLE[(tick + delay) % 3] : "bg-[#F4E4C1]";
+
   return (
     <div
-      className={`relative h-12 w-12 rounded-xl transition-all duration-150 ${
-        spinning
-          ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_0_24px_-4px_rgba(167,139,250,0.7)]"
-          : "bg-gradient-to-br from-zinc-50 to-zinc-200 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.5)]"
+      className={`relative h-12 w-12 border-[2.5px] border-[#1A1A1A] ${bg} ${
+        spinning ? "shake" : ""
       }`}
-      style={
-        spinning
-          ? {
-              transform: `rotate(${(tick * 17 + delay * 30) % 360}deg) scale(${
-                0.95 + 0.05 * Math.sin(tick / 2)
-              })`,
-            }
-          : undefined
-      }
     >
-      <Pips count={displayValue} dark={spinning} />
+      <Pips count={displayValue} />
     </div>
   );
 }
@@ -130,27 +125,23 @@ function LineGlyph({
 }) {
   const isYang = line === "youngYang" || line === "oldYang";
   const isOld = line === "oldYang" || line === "oldYin";
-  const bar = changed
-    ? "bg-gradient-to-r from-violet-400 via-fuchsia-400 to-orange-300"
-    : "bg-zinc-100";
+  const bar = changed ? "bg-[#E63946]" : "bg-[#1A1A1A]";
   return (
     <div className="flex items-center gap-3">
       <div className="flex h-3 w-44 items-center">
         {isYang ? (
-          <div className={`h-1 w-full rounded-full ${bar}`} />
+          <div className={`h-2 w-full ${bar}`} />
         ) : (
           <div className="flex w-full justify-between">
-            <div className={`h-1 w-[44%] rounded-full ${bar}`} />
-            <div className={`h-1 w-[44%] rounded-full ${bar}`} />
+            <div className={`h-2 w-[44%] ${bar}`} />
+            <div className={`h-2 w-[44%] ${bar}`} />
           </div>
         )}
       </div>
       {isOld && (
         <span
-          className={`h-2 w-2 rounded-full ${
-            changed
-              ? "bg-fuchsia-400 shadow-[0_0_8px_rgba(232,121,249,0.8)]"
-              : "bg-white/20"
+          className={`h-3 w-3 rounded-full border-2 border-[#1A1A1A] ${
+            changed ? "bg-[#FCC419]" : "bg-[#F4E4C1]"
           }`}
         />
       )}
@@ -167,7 +158,7 @@ function HexagramView({
 }) {
   const displayLines = [...lines].reverse();
   return (
-    <div className="flex flex-col gap-3 py-2">
+    <div className="flex flex-col gap-2.5 py-2">
       {displayLines.map((l, i) => (
         <LineGlyph
           key={i}
@@ -184,58 +175,77 @@ function HexagramCard({
   label,
   lines,
   highlightChanges,
+  accentColor,
 }: {
   hex: Hexagram;
   label: string;
   lines: LineType[];
   highlightChanges?: boolean;
+  accentColor: string;
 }) {
   return (
-    <div className="surface gradient-border fade-up overflow-hidden rounded-3xl p-8 sm:p-10">
-      <div className="mb-8 flex items-center justify-between">
-        <span className="font-display text-[10px] font-medium uppercase tracking-[0.4em] text-violet-300">
+    <div className="fade-up bg-[#FBF1DC] frame-thick relative overflow-hidden">
+      <div
+        className={`absolute -right-12 -top-12 h-40 w-40 rounded-full ${accentColor}`}
+      />
+      <div
+        className={`absolute right-4 top-4 z-10 ${accentColor} frame px-3 py-1`}
+      >
+        <span className="font-display text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A]">
           {label}
         </span>
-        <span className="font-display text-[10px] tracking-[0.3em] text-zinc-500">
-          № {String(hex.no).padStart(2, "0")} / 64
-        </span>
       </div>
 
-      <div className="flex flex-col gap-8 sm:flex-row sm:items-start">
-        <div className="flex-shrink-0">
-          <div className="text-7xl leading-none text-zinc-50 sm:text-8xl">
-            {hex.symbol}
-          </div>
+      <div className="relative p-8 sm:p-10">
+        <div className="flex items-baseline gap-3">
+          <span className="font-display text-5xl text-[#1A1A1A]">
+            № {String(hex.no).padStart(2, "0")}
+          </span>
+          <span className="font-display text-sm text-[#1A1A1A]/60">
+            / 64
+          </span>
         </div>
-        <div className="flex-1">
-          <div className="font-display text-xs tracking-[0.3em] text-zinc-500">
-            {hex.reading.toUpperCase()}
-          </div>
-          <h2 className="mt-1 text-3xl font-medium tracking-wider text-zinc-50">
-            {hex.name}
-          </h2>
-          <div className="mt-5">
-            <HexagramView lines={lines} highlightChanges={highlightChanges} />
-          </div>
-        </div>
-      </div>
 
-      <div className="mt-10 grid gap-6 border-t border-white/5 pt-8 sm:grid-cols-2">
-        <div>
-          <div className="font-display mb-3 text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-            Judgement · 卦辞
+        <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
+          <div className="flex flex-col items-center gap-3">
+            <div className="text-8xl leading-none text-[#1A1A1A]">
+              {hex.symbol}
+            </div>
+            <div className="frame inline-block bg-[#F4E4C1] px-2 py-0.5 text-[10px] tracking-widest text-[#1A1A1A]">
+              HEXAGRAM
+            </div>
           </div>
-          <p className="text-sm leading-relaxed text-zinc-300">
-            {hex.judgement}
-          </p>
+
+          <div className="flex-1">
+            <div className="font-display text-xs uppercase tracking-[0.3em] text-[#1A1A1A]/60">
+              {hex.reading.toUpperCase()}
+            </div>
+            <h2 className="font-display mt-1 text-4xl tracking-wide text-[#1A1A1A]">
+              {hex.name}
+            </h2>
+            <div className="mt-5 inline-block bg-[#F4E4C1] frame p-3">
+              <HexagramView lines={lines} highlightChanges={highlightChanges} />
+            </div>
+          </div>
         </div>
-        <div>
-          <div className="font-display mb-3 text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-            Interpretation · 解釈
+
+        <div className="mt-8 grid gap-6 border-t-[2.5px] border-[#1A1A1A] pt-6 sm:grid-cols-2">
+          <div>
+            <div className="font-display mb-2 inline-block bg-[#1A1A1A] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#F4E4C1]">
+              Judgement · 卦辞
+            </div>
+            <p className="mt-2 text-sm leading-relaxed text-[#1A1A1A]">
+              {hex.judgement}
+            </p>
           </div>
-          <p className="text-sm leading-relaxed text-zinc-300">
-            {hex.interpretation}
-          </p>
+          <div>
+            <div className="font-display mb-2 inline-block bg-[#1A1A1A] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#F4E4C1]">
+              Interpretation · 解釈
+            </div>
+            <p className="mt-2 text-sm leading-relaxed text-[#1A1A1A]">
+              {hex.interpretation}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -249,7 +259,7 @@ export default function Page() {
 
   useEffect(() => {
     if (spinningSlots.size === 0) return;
-    const id = setInterval(() => setTick((t) => t + 1), 60);
+    const id = setInterval(() => setTick((t) => t + 1), 70);
     return () => clearInterval(id);
   }, [spinningSlots.size]);
 
@@ -315,62 +325,83 @@ export default function Page() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="blob blob-1" />
-        <div className="blob blob-2" />
-        <div className="blob blob-3" />
-      </div>
+    <main className="relative min-h-screen overflow-hidden bg-[#F4E4C1]">
+      <div className="absolute inset-x-0 top-0 h-[55%] bg-[#F5B878]" />
 
-      <div className="relative mx-auto max-w-3xl px-6 py-16 sm:py-24">
-        <header className="mb-20 text-center">
-          <div className="font-display mb-6 inline-flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.4em] text-zinc-400">
-            <span className="h-px w-8 bg-zinc-700" />
-            I Ching Oracle · 2026
-            <span className="h-px w-8 bg-zinc-700" />
+      <div className="relative mx-auto max-w-3xl px-6 py-12 sm:py-16">
+        <header className="relative mb-12">
+          <div className="flex items-start justify-between">
+            <div className="font-display flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-[#1A1A1A]">
+              <span className="h-3 w-3 rounded-full bg-[#E63946]" />
+              <span>I Ching Oracle</span>
+            </div>
+            <div className="font-display text-right text-[11px] uppercase tracking-[0.3em] text-[#1A1A1A]">
+              <div>'26</div>
+              <div className="text-[#1A1A1A]/70">64 Hexagrams</div>
+            </div>
           </div>
-          <h1 className="gradient-text font-display text-7xl font-bold tracking-tight sm:text-8xl">
-            EKIKYO
-          </h1>
-          <p className="mt-5 text-xl font-light tracking-[0.4em] text-zinc-300">
-            六十四卦
-          </p>
-          <p className="mt-4 text-sm font-light text-zinc-500">
+
+          <div className="relative mt-12">
+            <h1 className="font-display text-[20vw] leading-[0.85] text-[#1A1A1A] sm:text-[140px]">
+              EKIKYO
+            </h1>
+            <p className="font-display absolute -bottom-2 right-0 bg-[#1A1A1A] px-3 py-1 text-xs tracking-widest text-[#F4E4C1] sm:right-2">
+              YÌ JĪNG · 易经
+            </p>
+          </div>
+
+          <div className="mt-10 flex items-center justify-center">
+            <div className="relative h-44 w-44 sm:h-56 sm:w-56">
+              <div className="absolute inset-0 rounded-full bg-[#FCC419]" />
+              <div className="absolute inset-0 overflow-hidden rounded-full">
+                <div className="absolute left-1/2 top-0 h-full w-1/2 bg-[#1A1A1A]" />
+              </div>
+              <div className="absolute left-[15%] top-[35%] h-20 w-20 bg-[#E63946] sm:h-28 sm:w-28" />
+              <div className="absolute right-0 bottom-[10%] h-16 w-24 bg-[#1D6FE5] sm:h-20 sm:w-32" />
+            </div>
+          </div>
+
+          <p className="mt-8 text-center text-sm tracking-wide text-[#1A1A1A]">
             サイコロを六回振り、本卦と之卦を立てる
           </p>
         </header>
 
-        <section className="surface fade-up mb-10 rounded-3xl p-8 sm:p-10">
-          <div className="mb-8 flex items-center gap-3">
-            <span className="h-px w-6 bg-gradient-to-r from-violet-400 to-fuchsia-400" />
-            <span className="font-display text-[10px] font-medium uppercase tracking-[0.4em] text-violet-300">
-              How it works · 占いの手順
+        <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-8 sm:p-10">
+          <div className="mb-6 flex items-center gap-3">
+            <span className="h-4 w-4 bg-[#E63946]" />
+            <span className="font-display text-xs uppercase tracking-[0.3em] text-[#1A1A1A]">
+              Ritual · 占いの手順
             </span>
           </div>
-          <ol className="space-y-6">
+          <ol className="space-y-5">
             {[
               {
                 title: "今、心に抱えている問いを思い浮かべる",
                 desc: "悩んでいること、決めかねていること、ひとつだけ選んで言葉にしてみてください。",
+                color: "bg-[#FCC419]",
               },
               {
                 title: "その問いを胸に、サイコロを六回振る",
                 desc: "一爻ずつじっくり振っても、六爻一括で振っても構いません。",
+                color: "bg-[#E63946]",
               },
               {
                 title: "立ち現れた卦から、問いへの示唆を読み取る",
                 desc: "変爻があれば之卦が現れ、現在から未来への流れを示します。",
+                color: "bg-[#1D6FE5]",
               },
             ].map((step, i) => (
-              <li key={i} className="flex items-start gap-5">
-                <span className="font-display flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500/30 to-fuchsia-500/20 text-sm font-semibold text-violet-200 ring-1 ring-violet-400/30">
+              <li key={i} className="flex items-start gap-4">
+                <span
+                  className={`font-display flex h-10 w-10 flex-shrink-0 items-center justify-center border-[2.5px] border-[#1A1A1A] text-base text-[#1A1A1A] ${step.color}`}
+                >
                   {i + 1}
                 </span>
-                <div className="flex-1 pt-0.5">
-                  <p className="text-[15px] font-medium text-zinc-100">
+                <div className="flex-1 pt-1.5">
+                  <p className="text-base font-medium text-[#1A1A1A]">
                     {step.title}
                   </p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">
+                  <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">
                     {step.desc}
                   </p>
                 </div>
@@ -379,29 +410,29 @@ export default function Page() {
           </ol>
         </section>
 
-        <section className="surface fade-up mb-12 rounded-3xl p-8 sm:p-10">
+        <section className="fade-up frame-thick mb-12 bg-[#FBF1DC] p-8 sm:p-10">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="h-px w-6 bg-gradient-to-r from-violet-400 to-fuchsia-400" />
-              <span className="font-display text-[10px] font-medium uppercase tracking-[0.4em] text-violet-300">
+              <span className="h-4 w-4 rounded-full bg-[#1D6FE5]" />
+              <span className="font-display text-xs uppercase tracking-[0.3em] text-[#1A1A1A]">
                 Cast · 卜筮
               </span>
-              <span className="font-display text-xs tabular-nums text-zinc-500">
+              <span className="font-display border-2 border-[#1A1A1A] bg-[#F4E4C1] px-2 py-0.5 text-xs tabular-nums text-[#1A1A1A]">
                 {completedThrows.length}/6
               </span>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={rollOne}
                 disabled={completedThrows.length >= 6 || animating}
-                className="btn-primary rounded-full px-5 py-2.5 text-xs font-semibold tracking-wider"
+                className="font-display border-[2.5px] border-[#1A1A1A] bg-[#FCC419] px-5 py-2 text-xs uppercase tracking-wider text-[#1A1A1A] transition hover:bg-[#FCC419]/90 disabled:cursor-not-allowed disabled:border-[#1A1A1A]/30 disabled:bg-[#F4E4C1] disabled:text-[#1A1A1A]/30"
               >
                 一爻振る
               </button>
               <button
                 onClick={rollAll}
                 disabled={animating}
-                className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-xs font-medium tracking-wider text-zinc-100 transition hover:border-white/30 hover:bg-white/10 disabled:cursor-not-allowed disabled:border-white/5 disabled:text-zinc-600"
+                className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-5 py-2 text-xs uppercase tracking-wider text-[#F4E4C1] transition hover:bg-[#E63946]/90 disabled:cursor-not-allowed disabled:border-[#1A1A1A]/30 disabled:bg-[#F4E4C1] disabled:text-[#1A1A1A]/30"
               >
                 六爻一括
               </button>
@@ -411,7 +442,7 @@ export default function Page() {
                   (completedThrows.length === 0 && spinningSlots.size === 0) ||
                   animating
                 }
-                className="rounded-full px-4 py-2.5 text-xs tracking-wider text-zinc-500 transition hover:text-zinc-200 disabled:cursor-not-allowed disabled:text-zinc-700"
+                className="font-display border-[2.5px] border-[#1A1A1A] bg-[#F4E4C1] px-4 py-2 text-xs uppercase tracking-wider text-[#1A1A1A] transition hover:bg-[#F4E4C1]/80 disabled:cursor-not-allowed disabled:border-[#1A1A1A]/30 disabled:text-[#1A1A1A]/30"
               >
                 やり直す
               </button>
@@ -425,25 +456,29 @@ export default function Page() {
               return (
                 <li
                   key={i}
-                  className={`flex items-center gap-4 rounded-2xl border px-5 py-4 transition-all duration-300 ${
+                  className={`flex items-center gap-4 border-[2.5px] px-4 py-3 transition-colors ${
                     spinning
-                      ? "border-violet-400/40 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/5"
+                      ? "border-[#1A1A1A] bg-[#FCC419]/30"
                       : t
-                        ? "border-white/8 bg-white/[0.02]"
-                        : "border-dashed border-white/5 bg-transparent"
+                        ? "border-[#1A1A1A] bg-[#F4E4C1]"
+                        : "border-dashed border-[#1A1A1A]/30 bg-transparent"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <span
-                      className={`font-display text-xs font-medium tabular-nums ${
-                        t ? "text-zinc-300" : "text-zinc-700"
+                      className={`font-display flex h-8 w-8 items-center justify-center border-2 text-xs ${
+                        t || spinning
+                          ? "border-[#1A1A1A] bg-[#1A1A1A] text-[#F4E4C1]"
+                          : "border-[#1A1A1A]/30 bg-transparent text-[#1A1A1A]/40"
                       }`}
                     >
                       0{i + 1}
                     </span>
                     <span
-                      className={`text-xs ${
-                        t ? "text-zinc-500" : "text-zinc-700"
+                      className={`text-sm ${
+                        t || spinning
+                          ? "text-[#1A1A1A]"
+                          : "text-[#1A1A1A]/40"
                       }`}
                     >
                       {label}爻
@@ -455,39 +490,42 @@ export default function Page() {
                       spinning={spinning}
                       tick={tick}
                       delay={0}
+                      colorIndex={i * 3}
                     />
                     <Die
                       value={t?.dice[1] ?? 0}
                       spinning={spinning}
                       tick={tick}
                       delay={3}
+                      colorIndex={i * 3 + 1}
                     />
                     <Die
                       value={t?.dice[2] ?? 0}
                       spinning={spinning}
                       tick={tick}
                       delay={6}
+                      colorIndex={i * 3 + 2}
                     />
                   </div>
                   <div className="ml-auto text-right">
                     {spinning ? (
-                      <span className="font-display animate-pulse text-[10px] font-medium tracking-[0.3em] text-violet-300">
+                      <span className="font-display animate-pulse bg-[#E63946] px-2 py-0.5 text-[10px] tracking-widest text-[#F4E4C1]">
                         ROLLING
                       </span>
                     ) : t ? (
                       <>
-                        <div className="font-display text-[10px] tabular-nums tracking-widest text-zinc-500">
-                          {t.sum}
+                        <div className="font-display text-[10px] tabular-nums tracking-widest text-[#1A1A1A]/60">
+                          SUM {t.sum}
                         </div>
-                        <div className="text-sm text-zinc-100">
+                        <div className="text-sm font-medium text-[#1A1A1A]">
                           {LINE_LABEL[t.line]}
                           {(t.line === "oldYang" || t.line === "oldYin") && (
-                            <span className="ml-1.5 text-fuchsia-400">●</span>
+                            <span className="ml-1 text-[#E63946]">●</span>
                           )}
                         </div>
                       </>
                     ) : (
-                      <span className="font-display text-[10px] tracking-widest text-zinc-700">
+                      <span className="font-display text-[10px] tracking-widest text-[#1A1A1A]/30">
                         IDLE
                       </span>
                     )}
@@ -502,43 +540,49 @@ export default function Page() {
           <section className="space-y-6">
             <HexagramCard
               hex={primary}
-              label="Primary · 本卦"
+              label="本卦 · Primary"
               lines={lines}
               highlightChanges
+              accentColor="bg-[#FCC419]"
             />
             {secondary && (
               <>
                 <div className="fade-up flex items-center justify-center gap-4 py-2">
-                  <span className="h-px w-12 bg-white/10" />
-                  <span className="font-display text-[10px] font-medium uppercase tracking-[0.4em] text-fuchsia-300">
-                    Transforms into
+                  <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
+                  <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#F4E4C1]">
+                    Transforms
                   </span>
-                  <span className="h-px w-12 bg-white/10" />
+                  <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
                 </div>
                 <HexagramCard
                   hex={secondary}
-                  label="Transformed · 之卦"
+                  label="之卦 · Transformed"
                   lines={transformed!}
+                  accentColor="bg-[#1D6FE5]"
                 />
               </>
             )}
             {!secondary && (
-              <p className="fade-up surface rounded-2xl p-5 text-center text-xs tracking-wider text-zinc-500">
+              <p className="fade-up frame-thick bg-[#FBF1DC] p-5 text-center text-sm tracking-wide text-[#1A1A1A]">
                 変爻なし — 本卦の示唆をそのまま受け取ってください
               </p>
             )}
           </section>
         )}
 
-        <footer className="mt-24 border-t border-white/5 pt-10 text-center">
-          <p className="text-xs leading-relaxed text-zinc-500">
+        <footer className="mt-20 border-t-[2.5px] border-[#1A1A1A] pt-8">
+          <div className="flex items-center justify-between">
+            <div className="font-display text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]">
+              EKIKYO
+            </div>
+            <div className="font-display text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]">
+              '26 · {HEXAGRAMS.length} Hexagrams
+            </div>
+          </div>
+          <p className="mt-5 text-center text-xs leading-relaxed text-[#1A1A1A]/70">
             三枚銭法に倣い、三個のサイコロで各爻を決定します。
-          </p>
-          <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+            <br />
             1〜3 を陽（3点）、4〜6 を陰（2点）として合計 6〜9 で爻の性質を判じます。
-          </p>
-          <p className="font-display mt-4 text-[10px] tracking-[0.3em] text-zinc-700">
-            EKIKYO · All {HEXAGRAMS.length} hexagrams · 2026
           </p>
         </footer>
       </div>

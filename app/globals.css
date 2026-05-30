@@ -2,12 +2,25 @@
 
 @theme inline {
   --font-sans: var(--font-noto-sans-jp), var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-inter), var(--font-noto-sans-jp), system-ui, sans-serif;
+  --font-display: var(--font-archivo-black), var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-inter), system-ui, sans-serif;
+
+  --color-ink: #1a1a1a;
+  --color-cream: #f4e4c1;
+  --color-peach: #f5b878;
+  --color-bauhaus-red: #e63946;
+  --color-bauhaus-yellow: #fcc419;
+  --color-bauhaus-blue: #1d6fe5;
+  --color-bauhaus-black: #1a1a1a;
 }
 
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .font-jp {
+    font-family: var(--font-sans);
   }
 }
 
@@ -16,31 +29,27 @@ body {
   font-feature-settings: "palt";
 }
 
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    background-position: 100% 50%;
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@keyframes blob-float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 40px) scale(0.95);
-  }
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-2px, 1px) rotate(-3deg); }
+  40% { transform: translate(2px, -1px) rotate(3deg); }
+  60% { transform: translate(-1px, 2px) rotate(-2deg); }
+  80% { transform: translate(1px, -2px) rotate(2deg); }
 }
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -48,124 +57,18 @@ body {
   }
 }
 
-.gradient-text {
-  background: linear-gradient(
-    135deg,
-    #c4b5fd 0%,
-    #f0abfc 35%,
-    #fda4af 70%,
-    #fcd34d 100%
-  );
-  background-size: 200% 200%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: gradient-shift 8s ease infinite;
-}
-
-.blob {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(80px);
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.blob-1 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
-  top: -200px;
-  left: -150px;
-  animation: blob-float 18s ease-in-out infinite;
-}
-
-.blob-2 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #ec4899 0%, transparent 70%);
-  top: -100px;
-  right: -100px;
-  animation: blob-float 22s ease-in-out infinite reverse;
-}
-
-.blob-3 {
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, #f59e0b 0%, transparent 70%);
-  bottom: 200px;
-  left: 30%;
-  animation: blob-float 25s ease-in-out infinite;
-  opacity: 0.3;
+.shake {
+  animation: shake 0.18s ease-in-out infinite;
 }
 
 .fade-up {
-  animation: fade-up 0.6s ease-out both;
+  animation: fade-up 0.5s ease-out both;
 }
 
-.surface {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+.frame {
+  border: 2px solid var(--color-ink);
 }
 
-.surface-accent {
-  background: linear-gradient(
-    180deg,
-    rgba(196, 181, 253, 0.06) 0%,
-    rgba(236, 72, 153, 0.02) 100%
-  );
-  border: 1px solid rgba(196, 181, 253, 0.18);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
-  color: white;
-  box-shadow:
-    0 8px 24px -6px rgba(167, 139, 250, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow:
-    0 12px 32px -6px rgba(167, 139, 250, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.btn-primary:disabled {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.3);
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
-.gradient-border {
-  position: relative;
-}
-
-.gradient-border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    rgba(196, 181, 253, 0.4),
-    rgba(236, 72, 153, 0.2),
-    rgba(252, 211, 77, 0.3)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+.frame-thick {
+  border: 3px solid var(--color-ink);
 }

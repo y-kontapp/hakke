@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_JP } from "next/font/google";
+import { Archivo_Black, Inter, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 
 const notoSansJp = Noto_Sans_JP({
@@ -12,6 +12,12 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const archivoBlack = Archivo_Black({
+  variable: "--font-archivo-black",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -28,9 +34,9 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${notoSansJp.variable} ${inter.variable} h-full antialiased`}
+      className={`${notoSansJp.variable} ${inter.variable} ${archivoBlack.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[#0a0a0f] text-zinc-100">{children}</body>
+      <body className="min-h-full bg-[#F4E4C1] text-[#1A1A1A]">{children}</body>
     </html>
   );
 }
