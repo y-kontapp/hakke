@@ -610,12 +610,24 @@ export default function Page() {
             />
             {secondary && (
               <>
-                <div className="fade-up flex items-center justify-center gap-4 py-2">
-                  <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
-                  <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#F4E4C1]">
-                    Transforms
-                  </span>
-                  <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
+                <div className="fade-up">
+                  <div className="flex items-center justify-center gap-4 py-2">
+                    <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
+                    <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#E63946] px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-[#F4E4C1]">
+                      Transforms · 之卦（しか）
+                    </span>
+                    <span className="h-[2.5px] w-12 bg-[#1A1A1A]" />
+                  </div>
+                  <div className="mx-auto mt-3 max-w-xl space-y-1 text-center text-xs leading-relaxed text-[#1A1A1A]/70">
+                    <p>
+                      <span className="font-medium text-[#1A1A1A]">本卦</span>
+                      は、いま自分が置かれている状況の構造。
+                    </p>
+                    <p>
+                      <span className="font-medium text-[#1A1A1A]">之卦</span>
+                      は、そこから自然に向かっていく先、変化後の姿です。
+                    </p>
+                  </div>
                 </div>
                 <HexagramCard
                   hex={secondary}
