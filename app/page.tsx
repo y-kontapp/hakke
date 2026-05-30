@@ -229,7 +229,7 @@ function HexagramCard({
           </div>
         </div>
 
-        <div className="mt-8 grid gap-6 border-t-[2.5px] border-[#1A1A1A] pt-6 sm:grid-cols-2">
+        <div className="mt-8 grid gap-7 border-t-[2.5px] border-[#1A1A1A] pt-6">
           <div>
             <div className="font-display mb-2 inline-block bg-[#1A1A1A] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#F4E4C1]">
               Judgement · 卦辞
