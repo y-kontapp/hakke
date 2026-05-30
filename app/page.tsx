@@ -256,6 +256,7 @@ export default function Page() {
   const [throws, setThrows] = useState<(Throw | null)[]>(Array(6).fill(null));
   const [spinningSlots, setSpinningSlots] = useState<Set<number>>(new Set());
   const [tick, setTick] = useState(0);
+  const [question, setQuestion] = useState("");
 
   useEffect(() => {
     if (spinningSlots.size === 0) return;
@@ -361,18 +362,9 @@ export default function Page() {
             </div>
           </div>
 
-          <p className="mt-8 text-center text-sm tracking-wide text-[#1A1A1A]">
-            サイコロを六回振り、本卦と之卦を立てる
-          </p>
         </header>
 
         <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-8 sm:p-10">
-          <div className="mb-6 flex items-center gap-3">
-            <span className="h-4 w-4 bg-[#E63946]" />
-            <span className="font-display text-xs uppercase tracking-[0.3em] text-[#1A1A1A]">
-              Ritual · 占いの手順
-            </span>
-          </div>
           <ol className="space-y-5">
             {[
               {
@@ -408,6 +400,24 @@ export default function Page() {
               </li>
             ))}
           </ol>
+        </section>
+
+        <section className="fade-up frame-thick mb-10 bg-[#FBF1DC] p-8 sm:p-10">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-display border-[2.5px] border-[#1A1A1A] bg-[#FCC419] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
+              Question · 今考えていること
+            </span>
+          </div>
+          <textarea
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="例：今の仕事を続けるべきか。彼との関係をどう進めるべきか。"
+            rows={3}
+            className="w-full resize-none border-[2.5px] border-[#1A1A1A] bg-[#F4E4C1] px-4 py-3 text-sm leading-relaxed text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:ring-0"
+          />
+          <p className="mt-2 text-xs text-[#1A1A1A]/60">
+            書かなくても占えますが、言葉にすると問いが定まります。
+          </p>
         </section>
 
         <section className="fade-up frame-thick mb-12 bg-[#FBF1DC] p-8 sm:p-10">
@@ -538,6 +548,16 @@ export default function Page() {
 
         {primary && (
           <section className="space-y-6">
+            {question.trim() && (
+              <div className="fade-up frame-thick bg-[#1A1A1A] p-6 sm:p-8">
+                <div className="font-display mb-3 inline-block bg-[#FCC419] px-2 py-0.5 text-[10px] uppercase tracking-[0.25em] text-[#1A1A1A]">
+                  Your Question · 問い
+                </div>
+                <p className="text-base leading-relaxed text-[#F4E4C1] sm:text-lg">
+                  {question}
+                </p>
+              </div>
+            )}
             <HexagramCard
               hex={primary}
               label="本卦 · Primary"
