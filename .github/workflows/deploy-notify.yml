@@ -1,19 +1,158 @@
-# デプロイ完了を Slack に通知する（共通ワークフロー y-kontapp/deploy-notify を呼び出す）。
-# Vercel が送る deployment_status イベントで起動する。
-# 通知先は Secret SLACK_WEBHOOK_URL（Slack Incoming Webhook）で決まる。
+# デプロイ完了を Slack に通知する（単体版）。
+# このリポジトリは public のため private の共通ワークフロー（y-kontapp/deploy-notify）を呼べない。
+# そのため共通ワークフローから生成した単体版を置いている。手で編集せず、
+# 共通側を変更したら deploy-notify の scripts/add-repo.sh を再実行して更新する。
+# GitHub のデプロイ完了（deployment_status イベント）を Slack に通知する共通ワークフロー。
+# 各リポジトリからは workflow_call で呼び出す（templates/caller.yml を参照）。
+#
+# Vercel の GitHub 連携は、デプロイのたびに GitHub 上に Deployment を作成し、
+# 完了時に deployment_status（success / failure / error）を送る。
+# このワークフローはそのイベントを受け取り、Slack Incoming Webhook へ投稿する。
+#
+# environment の名前は、1リポジトリに1つの Vercel プロジェクトなら "Production" / "Preview"、
+# 1リポジトリに複数プロジェクトがある場合は "Production – <プロジェクト名>" になる。
 name: deploy-notify
 
 on:
   deployment_status:
-
 jobs:
   notify:
-    uses: y-kontapp/deploy-notify/.github/workflows/slack-deploy-notify.yml@main
+    # 完了系の状態（success / failure / error）だけを通知する。pending / in_progress は無視する。
+    # Vercel の本番デプロイは environment が "Production" または "Production – <プロジェクト名>" になる。
+    if: >-
+      github.event_name == 'deployment_status'
+      && contains(fromJSON('["success","failure","error"]'), github.event.deployment_status.state)
+      && (startsWith(github.event.deployment.environment, 'Production') || false)
+    runs-on: ubuntu-latest
     permissions:
       contents: read
-    with:
-      service_name: hakke
-      production_url: "https://hakke.vercel.app"
-      notify_preview: false
-    secrets:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - name: コミット情報を取得
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.deployment.sha }}
+        run: |
+          json="$(gh api "repos/${REPO}/commits/${SHA}")"
+          {
+            echo "subject=$(jq -r '.commit.message | split("\n")[0]' <<<"$json")"
+            echo "author=$(jq -r '.author.login // .commit.author.name' <<<"$json")"
+            echo "url=$(jq -r '.html_url' <<<"$json")"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Slack へ送信
+        env:
+          WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SERVICE_NAME: hakke
+          PRODUCTION_URL: https://hakke.vercel.app
+          REPO: ${{ github.repository }}
+          STATE: ${{ github.event.deployment_status.state }}
+          ENVIRONMENT: ${{ github.event.deployment.environment }}
+          DEPLOY_URL: ${{ github.event.deployment_status.environment_url }}
+          LOG_URL: ${{ github.event.deployment_status.log_url }}
+          FINISHED_AT: ${{ github.event.deployment_status.created_at }}
+          SHA: ${{ github.event.deployment.sha }}
+          COMMIT_SUBJECT: ${{ steps.commit.outputs.subject }}
+          COMMIT_AUTHOR: ${{ steps.commit.outputs.author }}
+          COMMIT_URL: ${{ steps.commit.outputs.url }}
+        run: |
+          # Slack の mrkdwn で特別扱いされる記号をエスケープする
+          esc() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+
+          subject="$(esc "$COMMIT_SUBJECT")"
+          author="$(esc "$COMMIT_AUTHOR")"
+          short_sha="${SHA:0:7}"
+
+          # environment を「種別」と「プロジェクト名」に分ける
+          # 例: "Production" → base=Production project=""
+          #     "Production – tapp-direct-admin" → base=Production project=tapp-direct-admin
+          base="${ENVIRONMENT%% *}"
+          rest="${ENVIRONMENT#"$base"}"
+          project="$(printf '%s' "$rest" | sed -E 's/^[^[:alnum:]]+//')"
+
+          if [ "$base" = "Production" ]; then
+            env_label="本番"
+          else
+            env_label="プレビュー（${base}）"
+          fi
+
+          # 複数プロジェクトのリポジトリでは、プロジェクト名を表示名にする
+          display="$SERVICE_NAME"
+          if [ -n "$project" ]; then
+            display="$project"
+          fi
+
+          # 本番URL: 単一URL、または "プロジェクト名=URL;..." の一覧からプロジェクト名で選ぶ
+          prod_url=""
+          default_url=""
+          IFS=';' read -ra entries <<<"$PRODUCTION_URL"
+          for entry in "${entries[@]}"; do
+            case "$entry" in
+              *=*)
+                if [ "${entry%%=*}" = "$project" ]; then prod_url="${entry#*=}"; fi ;;
+              "") ;;
+              *)
+                default_url="$entry" ;;
+            esac
+          done
+          if [ -z "$prod_url" ] && [ -z "$project" ]; then
+            prod_url="$default_url"
+          fi
+
+          case "$STATE" in
+            success) result="完了しました"; color="#2eb67d" ;;
+            *)       result="失敗しました（${STATE}）"; color="#e01e5a" ;;
+          esac
+
+          finished="$(TZ=Asia/Tokyo date -d "$FINISHED_AT" '+%Y-%m-%d %H:%M JST' 2>/dev/null || echo "$FINISHED_AT")"
+
+          links="<${DEPLOY_URL}|デプロイURL>"
+          if [ -n "$LOG_URL" ] && [ "$LOG_URL" != "$DEPLOY_URL" ]; then
+            links="${links}  /  <${LOG_URL}|ログ>"
+          fi
+          if [ -n "$prod_url" ]; then
+            links="<${prod_url}|本番サイト>  /  ${links}"
+          fi
+
+          payload="$(jq -n \
+            --arg text "[${display}] ${env_label}デプロイが${result}" \
+            --arg color "$color" \
+            --arg headline "${display} の${env_label}デプロイが${result}" \
+            --arg commit "<${COMMIT_URL}|${short_sha}> ${subject}" \
+            --arg author "$author" \
+            --arg repo "<https://github.com/${REPO}|${REPO}>" \
+            --arg finished "$finished" \
+            --arg links "$links" \
+            '{
+              text: $text,
+              attachments: [{
+                color: $color,
+                blocks: [
+                  { type: "section", text: { type: "mrkdwn", text: ("*" + $headline + "*") } },
+                  { type: "section", fields: [
+                    { type: "mrkdwn", text: ("*コミット*\n" + $commit) },
+                    { type: "mrkdwn", text: ("*作成者*\n" + $author) },
+                    { type: "mrkdwn", text: ("*リポジトリ*\n" + $repo) },
+                    { type: "mrkdwn", text: ("*日時*\n" + $finished) }
+                  ] },
+                  { type: "section", text: { type: "mrkdwn", text: $links } }
+                ]
+              }]
+            }')"
+
+          if [ "${DRY_RUN:-}" = "1" ]; then
+            printf '%s\n' "$payload"
+            exit 0
+          fi
+
+          # Secret 未登録のときは失敗扱いにせず、警告だけ出して終える
+          # （失敗にすると GitHub から失敗メールが届き続けるため）
+          if [ -z "$WEBHOOK_URL" ]; then
+            printf '%s\n' "$payload"
+            echo "::warning::SLACK_WEBHOOK_URL が未登録のため Slack へ送信しませんでした。deploy-notify の scripts/set-webhook.sh で登録してください"
+            exit 0
+          fi
+
+          curl -sS --fail-with-body -X POST -H 'Content-Type: application/json' \
+            --data "$payload" "$WEBHOOK_URL"
