@@ -1,0 +1,19 @@
+# デプロイ完了を Slack に通知する（共通ワークフロー y-kontapp/deploy-notify を呼び出す）。
+# Vercel が送る deployment_status イベントで起動する。
+# 通知先は Secret SLACK_WEBHOOK_URL（Slack Incoming Webhook）で決まる。
+name: deploy-notify
+
+on:
+  deployment_status:
+
+jobs:
+  notify:
+    uses: y-kontapp/deploy-notify/.github/workflows/slack-deploy-notify.yml@main
+    permissions:
+      contents: read
+    with:
+      service_name: hakke
+      production_url: "https://hakke.vercel.app"
+      notify_preview: false
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
